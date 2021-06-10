@@ -1,0 +1,102 @@
+<script src="sidebar.js"></script>
+<body> 
+<div class="page-wrapper chiller-theme toggled">
+  <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+    <i class="fas fa-bars"></i>
+  </a>
+  <nav id="sidebar" class="sidebar-wrapper">
+    <div class="sidebar-content">
+      <div class="sidebar-brand">
+        <a href="#">Tempo</a>
+        <div id="close-sidebar">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+      <div class="sidebar-header">
+        <div class="user-pic">
+          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture">
+        </div>
+        <div class="user-info">
+          <span class="user-name">
+            <strong>{{user.username}}</strong>
+          </span>
+          <span class="user-role">Admin</span>
+            <a (click)="logOut()" class="btn btn-info btn-md my-2" value="Login">Logout</a>
+        </div>
+      </div>
+      <!-- sidebar-header  -->
+      <!-- sidebar-search  -->
+      <div class="sidebar-menu">
+        <ul>
+          <li class="header-menu">
+            <span>General</span>
+          </li>
+          <li class="sidebar-content">
+            <a routerLink="/principal/calendar">
+              <i class="fa"></i>
+              <span>Calendario</span>
+            </a>
+          </li>
+          <li class="sidebar-content">
+            <a routerLink="/principal/workers">
+              <i class="fa"></i>
+              <span>Empleados</span></a>
+          </li>
+          <li class="header-menu">
+            <span>Extra</span>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-book"></i>
+              <span>Documentation</span>
+              <span class="badge badge-pill badge-primary">Beta</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-calendar"></i>
+              <span>Calendar</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa fa-folder"></i>
+              <span>Examples</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- sidebar-wrapper  -->
+  <main class="page-content">
+    <div class="container">
+
+      <router-outlet></router-outlet> 
+      
+
+      <hr>
+
+      <footer class="text-center">
+        <div class="mb-2">
+          <small>
+            © 2021 made with <i class="fa fa-heart" style="color:red"></i> by - <a target="_blank" rel="noopener noreferrer" href="https://azouaoui.netlify.com">
+              Mohamed Azouaoui
+            </a>
+          </small>
+        </div>
+
+        <div>
+          <a href="https://github.com/azouaoui-med" target="_blank">
+          </a>
+          <a href="https://twitter.com/azouaoui_med" target="_blank">
+          </a>
+        </div>
+      </footer>
+
+    </div>
+
+  </main>
+  <!-- page-content" -->
+</div>
+</body>
