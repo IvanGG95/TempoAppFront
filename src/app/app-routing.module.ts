@@ -5,6 +5,10 @@ import {LoginComponent} from './login/login.component';
 import {PrincipalComponent} from './principal/principal.component';
 import {WorkersComponent} from './principal/workers/workers.component';
 import { CalendarComponent } from './principal/calendar/calendar.component';
+import { TeamsComponent } from './principal/teams/teams.component';
+import { InteractionsComponent } from './principal/interactions/interactions.component';
+
+
 
 
 
@@ -13,7 +17,9 @@ export const routes: Routes = [
   { path: 'principal', component: PrincipalComponent, children:[
     { path: '', component: CalendarComponent},
     { path: 'workers', component: WorkersComponent},
-    { path: 'calendar', component: CalendarComponent}
+    { path: 'calendar', component: CalendarComponent},
+    { path: 'teams', component: TeamsComponent},
+    { path: 'interactions', component: InteractionsComponent}
   ]},
   { path: '', redirectTo: 'principal', pathMatch: 'full' }
 ];

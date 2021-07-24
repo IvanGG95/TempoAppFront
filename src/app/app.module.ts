@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 import { PrincipalComponent } from './principal/principal.component';
 import { WorkersComponent } from './principal/workers/workers.component';
 import { CalendarComponent } from './principal/calendar/calendar.component';
+import { TeamsComponent } from './principal/teams/teams.component';
+import { InteractionsComponent } from './principal/interactions/interactions.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { CalendarComponent } from './principal/calendar/calendar.component';
     LoginComponent,
     PrincipalComponent,
     WorkersComponent,
-    CalendarComponent
+    CalendarComponent,
+    TeamsComponent,
+    InteractionsComponent
   ],
   imports: [
     BrowserModule,
