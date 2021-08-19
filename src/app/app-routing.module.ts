@@ -5,12 +5,12 @@ import {LoginComponent} from './login/login.component';
 import {PrincipalComponent} from './principal/principal.component';
 import {WorkersComponent} from './principal/workers/workers.component';
 import { CalendarComponent } from './principal/calendar/calendar.component';
-import { TeamsComponent } from './principal/teams/teams.component';
+import { TeamsComponent } from './principal/team/teams/teams.component';
 import { InteractionsComponent } from './principal/interactions/interactions.component';
-
-
-
-
+import { AddTeamComponent } from './principal/team/add-team/add-team.component';
+import { ReunionComponent } from './principal/reunion/reunions/reunion.component';
+import { VacationsComponent } from './principal/vacations/vacations.component';
+import { AddReunionComponent } from './principal/reunion/add-reunion/add-reunion.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent},
@@ -19,7 +19,11 @@ export const routes: Routes = [
     { path: 'workers', component: WorkersComponent},
     { path: 'calendar', component: CalendarComponent},
     { path: 'teams', component: TeamsComponent},
-    { path: 'interactions', component: InteractionsComponent}
+    { path: 'teamsAdd', component: AddTeamComponent},
+    { path: 'interactions', component: InteractionsComponent},
+    { path: 'reunion', component: ReunionComponent},
+    { path: 'reunionAdd', component: AddReunionComponent},
+    { path: 'vacations', component: VacationsComponent}
   ]},
   { path: '', redirectTo: 'principal', pathMatch: 'full' }
 ];

@@ -1,0 +1,36 @@
+<div class="container">
+    <h2>Crear Equipo</h2>
+    <hr>
+    <form class="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="teamName">Nombre del equipo</label>
+            <input class="form-control form-control-lg" type="text" placeholder="Nombre" required
+            [(ngModel)]="form.name" #name="ngModel" name="name">
+            <label for="teamDescripcion">Descripcion</label>
+            <textarea class="form-control" id="teamDescripcion" rows="3" required 
+            [(ngModel)]="form.description" #description="ngModel" class="form-control" name="description"></textarea>
+
+            <ul class="list-group mt-4" *ngIf="usersToAdd.length != 0">
+              <li class="list-group-item active">Usuarios invitados</li>
+              <li class="list-group-item" *ngFor="let username of usersToAdd" >{{username}}</li>
+            </ul>
+        </div>
+
+        <input type="submit" class="btn btn-primary btn-lg" value="Crear">
+    </form>
+
+    <h2 class="mt-4">Invitar usuarios</h2>
+    <hr>
+    <form class="form-inline" (ngSubmit)="onSearchSubmit()">
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuario" aria-label="Search" [(ngModel)]="form.nameUser" #nameUser="ngModel" name="nameUser" class="form-control">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <ul class="list-group mt-2">
+        <li class="list-group-item" *ngFor="let user of userA" >
+          <div class="row" *ngIf="user.username != loggedUser.username">
+            <div class="col text-center"><h4>{{user.username}}</h4></div>
+            <div class="col"><button class="btn btn-outline-success col" (click)="addUser(user)">Invitar</button></div>
+          </div>
+        </li>
+      </ul>
+</div>

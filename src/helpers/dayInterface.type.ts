@@ -1,4 +1,5 @@
 import { AssignedFreeDay } from "./assignedFreeDay.type";
+import { Reunion } from "./reunionInterface.type";
 
 export interface Day {
     actual: boolean;
@@ -10,5 +11,6 @@ export interface Day {
     toDelete: boolean;
     date: string;
     dayActual: number;
-    assignedFreeDays: AssignedFreeDay[]
+    assignedFreeDays: AssignedFreeDay[];
+    reunions: Reunion[]
 }

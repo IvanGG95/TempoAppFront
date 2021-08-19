@@ -1,0 +1,9 @@
+.borderBg {
+    border-style: solid;
+    border-width: 10px 1px;
+  }
+
+.status{
+    font-size: 15px;
+    font-weight: bold;
+}

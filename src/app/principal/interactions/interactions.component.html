@@ -1,45 +1,61 @@
 <div class="container">
-    <h2>Peticiones Enviadas</h2>
-    <hr>
+    <div>
+        <h2>Peticiones Enviadas</h2>
+        <hr>
 
-    <div class=row>
-        <div class="card col-lg-auto m-2" style="width: 18rem;" *ngFor="let petition of ownPetitions">
-          <div class="card-body container">
-            <h5 class="card-title mb-4" *ngIf="petition.reunion != null;else teamPeti">Invitacion a Reunion</h5>
-            <ng-template class="card-title mb-4" #teamPeti><h5 class="card-title mb-4">Invitacion a Equipo {{petition.team.name}}</h5></ng-template>
-            <h6 class="card-subtitle mb-2 text-muted">Para: {{petition.receiver.username}}</h6>
-            <p class="card-text">{{petition.status}}</p>
-        </div>
-        </div>
-    </div>
-
-    <h2>Peticiones Recividas</h2>
-    <hr>
-
-    <div class=row>
-        <div class="card col-lg-auto m-2" style="width: 18rem;" *ngFor="let petition of recivedPetitions | async">
-          <div class="card-body container">
-            <h5 class="card-title mb-4" *ngIf="petition.reunion != null;else teamPeti">Invitacion a Reunion</h5>
-            <ng-template class="card-title mb-4" #teamPeti><h5 class="card-title mb-4">Invitacion a Equipo {{petition.team.name}}</h5></ng-template>
-            <h6 class="card-subtitle mb-2 text-muted">Para: {{petition.receiver.username}}</h6>
-            <p class="card-text">{{petition.status}}</p>
-
-            <div class="container" *ngIf="petition.status == 'Pendiente'">
-                <div class="row">
-                    <div class="col">
-                        <button type="button" (click)="modifyPetition(petition.petitionId, 'Aceptada')" class="btn btn-outline-success">
-                            <img class="img-responsive" src="assets/icons/ok.png"  width="30" height="30" alt="">
-                        </button>
-                    </div>
-                    <div class="col">
-                        <button type="button" (click)="modifyPetition(petition.petitionId, 'Rechazada')" class="btn btn-outline-danger">
-                            <img class="img-responsive" src="assets/icons/no.png"  width="30" height="30" alt="">
-                        </button>
+        <div class="row">
+            <div class="card col-lg-auto m-2 borderBg" style="width: 18rem;" *ngFor="let petition of ownPetitions" [ngClass]="{
+                ' border-warning' : petition.status == 'Pendiente', 
+                ' border-danger' : petition.status == 'Rechazada',
+                ' border-success' : petition.status == 'Aceptada'}">
+              <div class="card-body container">
+                <h5 class="card-title mb-4" *ngIf="petition.reunion != null;else teamPeti">Invitacion a Reunion</h5>
+                <ng-template class="card-title mb-4" #teamPeti><h5 class="card-title mb-4">Invitacion a Equipo {{petition.team.name}}</h5></ng-template>
+                <h6 class="card-subtitle mb-2 text-muted">Para: {{petition.receiver.username}}</h6>
+                <div class="row mt-4">
+                    <div class="col"><span class="card-text status" disabled>{{petition.status}}</span></div>
+                    <div class="col col-lg-3">
+                      <button type="button" (click)="deletePetition(petition)" class="btn btn-outline-danger">
+                        <img class="img-responsive" src="assets/icons/no.png"  width="30" height="30" alt="">
+                    </button>
                     </div>
                 </div>
-            </div>  
-
+             </div>
+            </div>
         </div>
+    </div>
+    <div class="mt-5">
+        <h2>Peticiones Recividas</h2>
+        <hr>
+
+        <div class=row>
+            <div class="card col-lg-auto m-2 borderBg " style="width: 18rem;" *ngFor="let petition of recivedPetitions" [ngClass]="{
+                ' border-warning' : petition.status == 'Pendiente', 
+                ' border-danger' : petition.status == 'Rechazada',
+                ' border-success' : petition.status == 'Aceptada'}">
+              <div class="card-body container">
+                <h5 class="card-title mb-4" *ngIf="petition.reunion != null;else teamPeti">Invitacion a Reunion</h5>
+                <ng-template class="card-title mb-4" #teamPeti><h5 class="card-title mb-4">Invitacion a Equipo {{petition.team.name}}</h5></ng-template>
+                <h6 class="card-subtitle mb-2 text-muted">De: {{petition.creator.username}}</h6>
+                <p class="card-text status">{{petition.status}}</p>
+
+                <div class="container" *ngIf="petition.status == 'Pendiente'">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" (click)="modifyPetition(petition.petitionId, 'Aceptada')" class="btn btn-outline-success">
+                                <img class="img-responsive" src="assets/icons/ok.png"  width="30" height="30" alt="">
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="button" (click)="modifyPetition(petition.petitionId, 'Rechazada')" class="btn btn-outline-danger">
+                                <img class="img-responsive" src="assets/icons/no.png"  width="30" height="30" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>  
+
+            </div>
+            </div>
         </div>
     </div>
 </div>

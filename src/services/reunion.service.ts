@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../helpers/userInterface.type';
-import { Team } from '../helpers/teamInterface.type';
-import { Petition } from '../helpers/petitionInterface.type';
-import { PetitionUpdateDTO } from 'src/helpers/petitionUpdateInterface.type';
+import { Reunion } from 'src/helpers/reunionInterface.type';
+import { Team } from 'src/helpers/teamInterface.type';
+import { ReunionAdd } from 'src/helpers/reunionAddInterface.type';
 
-
-const USER_API = 'http://localhost:8080/petition';
+const USER_API = 'http://localhost:8080/reunion';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PetitionService {
+export class ReunionService {
 
   constructor(private http: HttpClient) { }
 
-  getOwnPetitions(credentials): Observable<Petition[]> {
+  getReunion(credentials): Observable<Reunion[]> {
 
     const httpOptions = {
       headers: new HttpHeaders({ 
@@ -25,10 +23,10 @@ export class PetitionService {
       }),
     };
 
-    return this.http.get<Petition[]>(USER_API + "/owner/" + credentials.username, httpOptions);
+    return this.http.get<Reunion[]>(USER_API +"/"+ credentials.username, httpOptions);
   }
 
-  getReceiverPetitions(credentials): Observable<Petition[]> {
+  addReunion(credentials, reunion : ReunionAdd): Observable<Reunion> {
 
     const httpOptions = {
       headers: new HttpHeaders({ 
@@ -37,12 +35,10 @@ export class PetitionService {
       }),
     };
 
-    return this.http.get<Petition[]>(USER_API + "/receiver/" + credentials.username, httpOptions);
+    return this.http.post<Reunion>(USER_API, reunion, httpOptions);
   }
 
-
-  putUpdate(credentials, petitionUpdateDTO: PetitionUpdateDTO): Observable<Petition[]> {
-
+  deleteReunion(credentials, id): Observable<Boolean>{
     const httpOptions = {
       headers: new HttpHeaders({ 
         'Content-Type': 'application/json',
@@ -50,14 +46,10 @@ export class PetitionService {
       }),
     };
 
-    const body = petitionUpdateDTO;
-
-    return this.http.put<any>(USER_API, body, httpOptions);;
-
+    return this.http.delete<Boolean>(USER_API+"/"+id, httpOptions);
   }
 
-  deletePetitions(credentials, id): Observable<Boolean> {
-
+  addAssistants(credentials, id, user: string[]): Observable<Reunion>{
     const httpOptions = {
       headers: new HttpHeaders({ 
         'Content-Type': 'application/json',
@@ -65,7 +57,6 @@ export class PetitionService {
       }),
     };
 
-    return this.http.delete<Boolean>(USER_API + "/"+ id, httpOptions);
+    return this.http.post<Reunion>(USER_API + "/addAssistants/" + id, user, httpOptions);
   }
-
 }

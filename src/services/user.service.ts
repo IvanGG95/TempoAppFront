@@ -24,4 +24,28 @@ export class UserService {
 
     return this.http.get<User[]>(USER_API + 'workers/?userName=' + credentials.username, httpOptions);
   }
+
+  getUsers(credentials, name): Observable<User[]> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+      }),
+    };
+
+    return this.http.get<User[]>(USER_API + 'byName/' + name, httpOptions);
+  }
+
+  getUser(credentials, name): Observable<User> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+      }),
+    };
+
+    return this.http.get<User>(USER_API  + name, httpOptions);
+  }
 }

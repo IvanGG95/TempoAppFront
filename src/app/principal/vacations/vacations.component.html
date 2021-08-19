@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row justify-content-md-center mb-4">
+    <button type="button" class="col col-lg-2 btn btn-dark btn-lg text-center rounded-circle" (click)="backMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/derecha.svg"  width="60" height="60" alt=""></button>
+    <h4 class="text-center display-4 mb-4 col-lg-5 px-5">{{actualMonth}} {{actualYear}}</h4>
+    <button type="button" class="col col-lg-2 btn btn-dark text-center rounded-circle"  (click)="nextMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/izquierda.svg"  width="60" height="60" alt=""></button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="row my-2">
+    <div class="col-7"></div>
+    <div class="col">
+      <div class="row bg-dark text-white">
+        <h4 class="col display-5">Vacaciones restantes:</h4>
+        <h4 class="col-4 display-5 border-left border-white">{{user.availableFreeDays}} dias</h4>
+      </div>
+    </div>
+  </div>
+
+    <header>
+      <div class="row bg-dark text-white">
+        <h5 class="col-sm order-1 text-center">Lunes</h5>
+        <h5 class="col-sm order-2 text-center">Martes</h5>
+        <h5 class="col-sm order-3 text-center">Miercoles</h5>
+        <h5 class="col-sm order-4 text-center">Jueves</h5>
+        <h5 class="col-sm order-5 text-center">Viernes</h5>
+        <h5 class="col-sm order-6 text-center">Sabado</h5>
+        <h5 class="col-sm order-7 text-center">Domingo</h5>
+         <div class="w-100"></div>
+      </div>
+    </header>
+    <div class="row border border-right-0 border-bottom-0">
+      <div  *ngFor="let a of days; let index = index" 
+      [ngClass]="{'w-100' : index%8==0, 
+      'card col' : index%8!=0, 
+      'bg-info' : a.toDelete == true,
+      'bg-primary' : a.holidays==true, 
+      'bg-danger' : a.taken==true,
+      'bg-dark text-white' : a.weekEnd==true,
+      'bg-secondary' : a.free==true}" 
+      (click)="onSave(a)" 
+      style="width: 12rem;">
+          <div *ngIf="index%8!=0">
+            <div class="card-body">
+              <h5 class="card-title text-center" [ngClass]="{' border rounded-circle border-success' : a.actual==true}">{{a.dayActual}}</h5>
+            </div>
+          </div>
+        </div>  
+  </div>
+</div>
+<div class="container mt-4">
+  <header>
+    <h4 class="display-4 mb-4 text-center">Gestion de vacaciones selecionadas</h4></header>
+  <div class="row">
+    <ul class="list-group col-sm">
+      <li class="list-group-item bg-dark text-white text-center"><h5>Vacaciones a pedir</h5></li>
+      <li *ngFor="let a of holidaysToAdd;" class="list-group-item border">{{a.date}}</li>
+    </ul>
+    <ul class="list-group col-sm">
+      <li class="list-group-item bg-dark text-white border text-center"><h5>Vacaciones a borrar</h5></li>
+      <li *ngFor="let a of holidaysToDelete;" class="list-group-item">{{a.date}}</li>
+    </ul>
+  </div>
+  <div class="row justify-content-md-center m-5">
+    <button type="button" class="btn btn-primary btn-lg text-center" (click)="persistChanges()">Actualizar vacaciones</button>
+  </div>
+</div>
+

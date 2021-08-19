@@ -1,0 +1,41 @@
+<div class="container">
+  <div class=" row">
+    <div class=" = col">  <h2>Mis Equipos</h2>    </div>
+    <div class=" = col-lg-2">
+      <button type="button" class="btn btn-primary btn-lg" routerLink="/principal/teamsAdd">
+        Crear Equipo
+      </button>
+    </div>
+  </div>
+  <hr>
+
+  <div class=row>
+  <div class="card col-lg-auto m-2" style="width: 18rem;" *ngFor="let team of teams">
+    <div class="card-body container">
+      <div class="row">
+        <div class="col"><h5 class="card-title mb-4">{{team.name}}</h5>
+        </div>
+        <div class="col col-lg-3">
+          <div *ngIf="team.owner.username == loggedUser.username; else elseBlock">
+            <button type="button" (click)="deleteTeam(team)" class="btn btn-outline-danger">
+              <img class="img-responsive" src="assets/icons/no.png"  width="30" height="30" alt="">
+            </button>
+          </div>
+          <ng-template  #elseBlock>
+            <button type="button" (click)="deleteTeam(team)" class="btn btn-outline-danger">
+              <img class="img-responsive" src="assets/icons/exit.svg"  width="30" height="30" alt="">
+            </button></ng-template>
+        </div>
+      </div>
+
+      <h6 class="card-subtitle mb-2 text-muted">Creador: {{team.owner.username}}</h6>
+      <p class="card-text">{{team.description}}</p>
+      <hr>   
+        <h6 class="text-primary">Miembros</h6>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" *ngFor="let user of team.employees">{{user.username}}</li>
+        </ul>
+
+  </div>
+  </div>
+</div>

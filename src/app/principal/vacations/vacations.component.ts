@@ -10,10 +10,10 @@ import { UserService } from 'src/services/user.service';
 
 @Component({
   selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+  templateUrl: './vacations.component.html',
+  styleUrls: ['./vacations.component.css']
 })
-export class CalendarComponent implements OnInit {
+export class VacationsComponent implements OnInit {
 
   constructor(private monthService: MonthService, private userService: UserService) { }
 
@@ -21,9 +21,9 @@ export class CalendarComponent implements OnInit {
 
   loggedUser: User;
 
-  days :Day[];
+  user: User;
 
-  dayToSee: Day;
+  days :Day[];
 
   actualMonth: string;
   actualYear: number;
@@ -33,7 +33,9 @@ export class CalendarComponent implements OnInit {
   firstCalendarDate: string
 
   months = new Array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Dicienbre')
-
+  
+  holidaysToDelete: Day[] = new Array;
+  holidaysToAdd: Day[] = new Array;
 
   ngOnInit() {
     var date = new Date();
@@ -49,12 +51,40 @@ export class CalendarComponent implements OnInit {
     this.loggedUser = JSON.parse(localStorage.getItem('user'));
 
   this.monthService.getMonth(this.loggedUser,today).subscribe(
-      data => {this.days = data
-        this.dayToSee = this.days[0]
-      console.log(this.days)}
+      data => {this.days = data}
     );
+
+  this.userService.getUser(this.loggedUser, this.loggedUser.username).subscribe(
+    data => {this.user = data}
+  )
   }
   onSave(date: Day){
+    if(date.free){
+      date.free = false;  
+      this.holidaysToAdd = this.holidaysToAdd.filter(obj => obj !== date);        
+      this.user.availableFreeDays = this.user.availableFreeDays +1;
+    }else{
+      if((date.holidays == false) && (date.weekEnd == false) 
+      && !(date.toDelete == true) && (date.taken == false)){
+        date.free = true;
+        this.holidaysToAdd.push(date);
+        this.user.availableFreeDays = this.user.availableFreeDays -1;
+      }
+    }
+
+    if(date.holidays){
+      this.holidaysToDelete.push(date);
+      date.holidays = false;
+      date.toDelete = true;
+      this.user.availableFreeDays = this.user.availableFreeDays +1;
+    }else{
+      if(date.toDelete){
+        this.holidaysToDelete = this.holidaysToDelete.filter(obj => obj !== date);
+        date.toDelete = false;
+        date.holidays = true;
+        this.user.availableFreeDays = this.user.availableFreeDays -1;
+      }
+    }
   }
 
   nextMonth(numberMonth: number, numberYear: number){
@@ -119,9 +149,42 @@ export class CalendarComponent implements OnInit {
 
   }
 
-  seeDay(day: Day){
-    console.log(day.reunions)
-    this.dayToSee = day;
+  persistChanges(){
+    console.log(this.loggedUser);
+
+    let freeDaysAdd : AssignedFreeDay[] = new Array;
+    let freeDaysDelete : AssignedFreeDay[] = new Array;
+
+    this.holidaysToAdd.forEach(element => {
+      let freeDay =  <AssignedFreeDay> {};
+      freeDay.userId = this.loggedUser.userId;
+      freeDay.date = element.date;
+      console.log(element.date);
+      freeDaysAdd.push(freeDay);
+    });
+
+    this.holidaysToDelete.forEach(element => {
+      let freeDay =  <AssignedFreeDay> {};
+      freeDay.userId = this.loggedUser.userId;
+      freeDay.date = element.date;
+      freeDaysDelete.push(freeDay);
+    });
+
+    this.monthService.addHollidays(this.loggedUser, freeDaysAdd).subscribe(
+      data => {
+    console.log(data)}
+    );;
+
+    this.monthService.deleteHollidays(this.loggedUser, freeDaysDelete).subscribe(
+      data => {
+    console.log(data)}
+    );;
+
+    this.holidaysToDelete = new Array;
+    this.holidaysToAdd = new Array;
+
+    this.ngOnInit();
+
   }
 }
 

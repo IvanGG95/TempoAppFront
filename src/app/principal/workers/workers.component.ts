@@ -17,10 +17,9 @@ export class WorkersComponent implements OnInit {
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem('user'));
     this.userService.getWorkers(this.loggedUser).subscribe(
-      data => {this.users = data
-    console.log(data)
-    console.log(this.users)}
-    );
+      data => {this.users = data});
+      console.log(this.users)
   }
+
 
 }
