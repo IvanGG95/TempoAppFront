@@ -15,6 +15,7 @@ import { AddTeamComponent } from './principal/team/add-team/add-team.component';
 import { ReunionComponent } from './principal/reunion/reunions/reunion.component';
 import { VacationsComponent } from './principal/vacations/vacations.component';
 import { AddReunionComponent } from './principal/reunion/add-reunion/add-reunion.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AddReunionComponent } from './principal/reunion/add-reunion/add-reunion
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   bootstrap: [AppComponent]
 })

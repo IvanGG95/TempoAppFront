@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row justify-content-md-center mb-4">
-    <button type="button" class="col col-lg-2 btn btn-dark btn-lg text-center rounded-circle" (click)="backMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/derecha.svg"  width="60" height="60" alt=""></button>
+    <button type="button" class="text-center " (click)="backMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/right.png"  width="60" height="60" alt=""></button>
     <h4 class="text-center display-4 mb-4 col-lg-5 px-5">{{actualMonth}} {{actualYear}}</h4>
-    <button type="button" class="col col-lg-2 btn btn-dark text-center rounded-circle"  (click)="nextMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/izquierda.svg"  width="60" height="60" alt=""></button>
+    <button type="button" class="text-center"  (click)="nextMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/left.png"  width="60" height="60" alt=""></button>
   </div>
 </div>
 
