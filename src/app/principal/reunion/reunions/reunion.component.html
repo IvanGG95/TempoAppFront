@@ -1,63 +1,118 @@
 <div class="container">
-    <div class=" row">
-      <div class=" = col">  <h2>Reuniones</h2>    </div>
-      <div class=" = col-lg-2">
-        <button type="button" class="btn btn-primary btn-lg" routerLink="/principal/reunionAdd">
-          Crear Reunion
-        </button>
-      </div>
+  <div class=" row mb-5">
+    <div class=" = col">
+      <h2 class="titleWhite">Reuniones</h2>
     </div>
-    <hr>
-  
-    <div class=row>
-    <div class="card col-lg-auto m-2" style="width: 18rem;" *ngFor="let reunion of reunions">
-      <div class="card-body container">
-        <div class="row">
-          <div class="col"><h5 class="card-title mb-4">{{reunion.days}} a las {{reunion.hours}}</h5>
-          </div>
-          <div class="col col-lg-3">
-            <button type="button" (click)="deleteReunion(reunion)" class="btn btn-outline-danger">
-              <img class="img-responsive" src="assets/icons/no.png"  width="30" height="30" alt="">
-            </button>
-          </div>
-        </div>
-  
-        <h6 class="card-subtitle mb-2 text-muted">Creador: {{reunion.creator.username}}</h6>
-        <h6 class="card-subtitle mb-2 mt-2 text-muted">Reunion: {{reunion.team.name}}</h6>
-        <p class="card-text">{{reunion.description}}</p>
-        <hr>   
-        <h6 class="text-primary" *ngIf="reunion.assistant.length != 0">Asistentes</h6>
-        <ul class="list-group list-group-flush " *ngIf="reunion.assistant.length != 0">
-          <li class="list-group-item" *ngFor="let user of reunion.assistant">{{user.username}}</li>
-        </ul>
-        <div class="d-flex justify-content-center">
-          <button *ngIf="usersToAdd.length == 0 && reunion.creator.username==loggedUser.username" type="button" (click)="addAssistants(reunion.reunionId)" class="btn btn-outline-primary">Invitar</button>
-        </div>
-
-        <ul class="list-group mt-4" *ngIf="usersToAdd.length != 0 && currentReunion == reunion.reunionId">
-          <li class="list-group-item active">Usuarios a invitar</li>
-          <li class="list-group-item" *ngFor="let username of usersToAdd" >{{username}}</li>
-        </ul>
-
-        <div class="d-flex justify-content-center mt-2" *ngIf="usersToAdd.length != 0 && currentReunion == reunion.reunionId">
-          <button type="button" (click)="addAssistantsBd(reunion)" class="btn btn-success">Invitar</button>
-        </div>
-
-        <hr>
-        <div class="list-group mt-2" *ngIf="search == true && currentReunion == reunion.reunionId">
-          <form class="form d-flex justify-content-center" (ngSubmit)="onSearchSubmit()">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuario" aria-label="Search" [(ngModel)]="form.nameUser" #nameUser="ngModel" name="nameUser" class="form-control">
-            <button class="btn btn-outline-success mt-1 my-2 my-sm-0" type="submit">Search</button>
-          </form>
-          <ul class="mt-3 mr-5">
-            <li class="list-group-item" *ngFor="let user of userA" >
-              <div *ngIf="user.username != loggedUser.username">
-                <div class="text-center">{{user.username}}</div>
-                <button class="btn btn-outline-success col" (click)="addUser(user)">Invitar</button>
-              </div>
-            </li>
-          </ul>
-        </div>
-    </div>
+    <div class=" = col-lg-2">
+      <button type="button" class="btn btnTmp btn-lg" routerLink="/principal/reunionAdd">
+        Crear Reunion
+      </button>
     </div>
   </div>
+
+  <div class=row>
+    <div class="card col-lg-auto m-2" style="width: 18rem;" *ngFor="let reunion of reunions">
+      <div class="card-body container">
+        <div class="row  mb-4">
+          <div class="col">
+            <h5 class="card-title mb-2">{{reunion.days}}</h5>
+            <h5 class="card-title mb-4">{{reunion.hours}}</h5>
+          </div>
+          <div class="col col-lg-3">
+            <div *ngIf="reunion.creator.username == loggedUser.username; else elseBlock">
+              <button type="button" (click)="deleteReunion(reunion)" width="12" height="12" class="btn transparent">
+                <img class="img-responsive" src="assets/icons/no.png"  width="15" height="15" alt="">
+              </button>
+            </div>
+            <ng-template  #elseBlock>
+              <button type="button" (click)="exitReunion(reunion)" class="btn transparent">
+                <img class="img-responsive" src="assets/icons/exit.svg"  width="15" height="15" alt="">
+              </button></ng-template>
+          </div>
+        </div>
+
+        <div class="row">
+          <h6 class="col-5  card-subtitle mb-2 text-muted">Creador: </h6>
+          <h6 class="col card-subtitle mb-2">{{reunion.creator.username}}</h6>
+        </div>
+
+        <div class="row mt-3">
+          <h6 class="col-5  card-subtitle mb-2 text-muted">Reunion: </h6>
+          <h6 class="col card-subtitle mb-2"> {{reunion.team.name}}</h6>
+        </div>
+
+        <div class="row mt-3">
+          <h6 class="col-5  card-subtitle mb-2 text-muted">Nº Asistentes </h6>
+          <h6 class="col card-subtitle mb-2"> {{reunion.assistant.length}}</h6>
+        </div>
+
+        <div class="row mt-3">
+          <h6 class="col  card-subtitle mb-2 text-muted">Descripcion: </h6>
+        </div>
+        <p class="card-text mb-5">{{reunion.description}}</p>
+
+        <div class="row mx-2 position-absolute fixed-bottom">
+          <button class="btn btnTmp col m-2" (click)="open(invitar, reunion)">Invitar</button>
+          <button class="btn btnTmp col m-2" (click)="open(asistentes, reunion)">Asistentes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <ng-template #asistentes let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Asistentes</h4>
+      <button type="button" class="close transparent" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+      </button>
+    </div>
+    <div class="modal-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let user of reunion.assistant">{{user.username}}</li>
+      </ul>
+    </div>
+  </ng-template>
+
+  <ng-template #invitar let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Usuarios</h4>
+      <button type="button" class="close transparent" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div class="m-4">
+        <ul class="list-group mt-4" *ngIf="usersToAdd.length != 0">
+          <li class="list-group-item bg-tmp text-light">Usuarios invitados</li>
+          <li class="list-group-item" *ngFor="let username of usersToAdd">
+            <div class="row">
+              <div class="col"> <label>{{username}}</label> </div>
+              <div class="col"><button type="button col" (click)="deleteInvited(username)" class="btn transparent">
+                  <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+                </button></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="row m-4" *ngIf="usersToAdd.length != 0">
+        <button class="btn btnTmp col m-2" (click)="addAssistantsBd()">Enviar invitaciones</button>
+        <hr>
+      </div>
+      <div class="md-form row m-4 text-center rounded bg-dark text-light">
+        <label for="teamDescripcion">Buscar Usuario</label>
+        <input class="form-control" type="search" [(ngModel)]="searchText" placeholder="Buscar">
+      </div>
+
+      <ul class="list-group m-4">
+        <li class="list-group-item" *ngFor="let user of allUsers | filter: searchText">
+          <div class="row" *ngIf="user != loggedUser.username">
+            <div class="col text-center"><label>{{user}}</label></div>
+            <div class="col text-center"><button class="btn btnTmp col" (click)="addUser(user)">Invitar</button></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </ng-template>

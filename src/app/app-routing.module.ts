@@ -11,9 +11,11 @@ import { AddTeamComponent } from './principal/team/add-team/add-team.component';
 import { ReunionComponent } from './principal/reunion/reunions/reunion.component';
 import { VacationsComponent } from './principal/vacations/vacations.component';
 import { AddReunionComponent } from './principal/reunion/add-reunion/add-reunion.component';
+import { AddUserComponent } from './add-user/add-user.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent},
+  { path: 'adduser', component: AddUserComponent},
   { path: 'principal', component: PrincipalComponent, children:[
     { path: '', component: CalendarComponent},
     { path: 'workers', component: WorkersComponent},
@@ -28,12 +30,8 @@ export const routes: Routes = [
   { path: '', redirectTo: 'principal', pathMatch: 'full' }
 ];
 
-const opt = {
-  enableTracing: false
-};
-
 @NgModule({
-  imports: [CommonModule,RouterModule.forRoot(routes, opt)],
+  imports: [CommonModule,RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: []
 })

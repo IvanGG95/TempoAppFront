@@ -1,0 +1,94 @@
+$accent: #0dcaf0;
+$hoever: #125c6b;
+$white: #f2f2f2;
+
+body{
+    background: url("assets/images/bgDark.jpg") no-repeat center center fixed;
+}
+
+.btnTmp{
+    color: white;
+    font-weight: bold;
+    background-color: $accent;
+    align-content: center;
+}
+
+.btnTmp:hover{
+    color: white;
+    font-weight: bold;
+    background-color: $hoever;
+    align-content: center;
+}
+
+.loginTitle{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.bg-white{
+    background-color: $white;
+}
+
+.bg-hover{
+    background-color: $hoever;
+    color: $white;
+}
+
+.bg-tmp{
+    background-color: $accent;
+}
+
+.card-tmp{
+    border-radius: 10px;
+    background-color: $white;
+    padding: 8px;
+}
+
+.transparent{
+    background-color: transparent;
+    border: transparent;
+}
+
+.transparent:hover{
+    background-color: transparent;
+    border: transparent;
+}
+
+.transparent:active{
+    background-color: transparent;
+    border: transparent;
+}
+
+.titleWhite{
+    font-size: 30px;
+    color: $white;
+    border-style: solid;
+    border-color: $white;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    border-width: 0px 0px 5px 5px;
+}
+
+.largebtn{
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+
+
+.input-group-text, .input-group.has-validation>.dropdown-toggle:nth-last-child(n+4), .input-group.has-validation>:nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu), .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3), .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
+    background-color: $accent;
+    color: white;
+}
+
+footer {
+    position:absolute;
+    bottom:0;
+    right: 0;
+    margin: 5px;
+}
+
+.bg-used{
+opacity:0.2;
+}
+

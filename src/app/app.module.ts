@@ -16,6 +16,9 @@ import { ReunionComponent } from './principal/reunion/reunions/reunion.component
 import { VacationsComponent } from './principal/vacations/vacations.component';
 import { AddReunionComponent } from './principal/reunion/add-reunion/add-reunion.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AddUserComponent } from './add-user/add-user.component';
+import { SearchUsersComponent } from './principal/team/search-users/search-users.component';
+import { FilterPipe } from './filter.pipe';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReunionComponent,
     VacationsComponent,
     AddReunionComponent,
+    AddUserComponent,
+    SearchUsersComponent,
+    FilterPipe,
   ],
   imports: [
     BrowserModule,

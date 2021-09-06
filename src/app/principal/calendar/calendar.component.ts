@@ -32,6 +32,8 @@ export class CalendarComponent implements OnInit {
   calendarDate: string;
   firstCalendarDate: string
 
+  today;
+
   months = new Array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Dicienbre')
 
 
@@ -40,15 +42,15 @@ export class CalendarComponent implements OnInit {
     var dd = String(date.getDate()).padStart(2, '0');
     var mm = String(date.getMonth() + 1).padStart(2, '0');
     var yyyy = date.getFullYear();
-    var today = yyyy + '-' + mm + '-' + dd;
+    this.today = yyyy + '-' + mm + '-' + dd;
     this.actualMonthNumber = date.getMonth() + 1
     this.calendarDate = yyyy + '-' + mm;
-    this.firstCalendarDate = today;
+    this.firstCalendarDate = this.today ;
     this.actualMonth = this.months[date.getMonth()];
     this.actualYear = date.getFullYear();
     this.loggedUser = JSON.parse(localStorage.getItem('user'));
 
-  this.monthService.getMonth(this.loggedUser,today).subscribe(
+  this.monthService.getMonth(this.loggedUser,this.today ).subscribe(
       data => {this.days = data
         this.dayToSee = this.days[0]
       console.log(this.days)}
@@ -120,8 +122,31 @@ export class CalendarComponent implements OnInit {
   }
 
   seeDay(day: Day){
-    console.log(day.reunions)
+    console.log(day)
     this.dayToSee = day;
+  }
+
+  isPassDay(dayDate: string){
+    let date: Date = new Date(); 
+    let dateDay: Date = new Date(dayDate); 
+    if(date.getTime() >= dateDay.getTime()){
+      if(this.isToday(dayDate)){
+        return false;
+      }
+      return true;
+    }
+  
+    return false;
+  }
+  
+  
+  isToday(dayDate: string){
+  
+    if(dayDate == this.today){
+      return true;
+    }
+  
+    return false;
   }
 }
 

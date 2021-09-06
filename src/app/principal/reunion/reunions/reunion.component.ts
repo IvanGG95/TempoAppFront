@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Reunion } from 'src/helpers/reunionInterface.type';
@@ -13,87 +14,118 @@ import { UserService } from 'src/services/user.service';
 })
 export class ReunionComponent implements OnInit, OnDestroy {
 
-    private readonly onDestroy = new Subject<void>();
-    
-    reunions: Reunion[];
-  
-    loggedUser: User;
+  private readonly onDestroy = new Subject<void>();
 
-    search: boolean;
+  reunions: Reunion[];
 
-    currentReunion: number;
+  loggedUser: User;
 
-    userA: User[];
+  currentReunion: Reunion;
 
-    form: any = {};
+  reunion: Reunion;
 
-    usersToAdd: string[];
-  
-    constructor(private reunionService: ReunionService, private userService :UserService) { 
-      this.reunions = new Array;
-      this.search = false;
-      this.currentReunion = null
-      this.usersToAdd = new Array();
-    }
-  
-    ngOnInit() {
+  searchText;
 
-      this.loggedUser = JSON.parse(localStorage.getItem('user'));
-      this.reunionService.getReunion(this.loggedUser).pipe(takeUntil(this.onDestroy)).subscribe(
-        data => {
-          this.reunions = data;
-          console.log(this.reunions);
-        }
-        );
-    }
-  
-    ngOnDestroy(){
-      this.onDestroy.next();
-    }
+  usersToAdd: string[];
 
-    addAssistants(reunionId){
-      this.search= true;
-      this.currentReunion = reunionId;
-    }
-  
-  
-  deleteReunion(reunion){
+  closeResult = '';
+
+  allUsers: string[];
+
+  constructor(private reunionService: ReunionService, private userService: UserService, private modalService: NgbModal,) {
+    this.reunions = new Array;
+    this.currentReunion = null
+    this.usersToAdd = new Array();
+  }
+
+  ngOnInit() {
+
+    this.loggedUser = JSON.parse(localStorage.getItem('user'));
+    this.reunionService.getReunion(this.loggedUser).pipe(takeUntil(this.onDestroy)).subscribe(
+      data => {
+        this.reunions = data;
+        console.log(this.reunions);
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.onDestroy.next();
+  }
+
+  deleteReunion(reunion) {
     let deleted;
-    this.reunionService.deleteReunion(this.loggedUser,reunion.reunionId).pipe(takeUntil(this.onDestroy)).subscribe(
+    this.reunionService.deleteReunion(this.loggedUser, reunion.reunionId).pipe(takeUntil(this.onDestroy)).subscribe(
       data => {
         deleted = data;
-        if(deleted == true){
+        if (deleted == true) {
           this.reunions = this.reunions.filter(obj => obj !== reunion);
         }
       }
     );
   }
 
-  onSearchSubmit(): void{
-    this.userService.getUsers(this.loggedUser, this.form.nameUser).subscribe(
+  addUser(user) {
+    this.allUsers = this.allUsers.filter(obj => obj !== user);
+    this.usersToAdd.push(user);
+
+  }
+
+  addAssistantsBd() {
+    this.reunionService.addAssistants(this.loggedUser, this.reunion.reunionId, this.usersToAdd).subscribe(data => {
+      this.ngOnInit();
+      this.usersToAdd = new Array();
+    });
+  }
+
+  open(content, reunion) {
+    this.reunion = reunion;
+    this.allUsers = new Array();
+
+    this.userService.getAllUsers(this.loggedUser).pipe(takeUntil(this.onDestroy)).subscribe(
       data => {
-      this.userA = data});
-}
+        let employees: string[] = new Array();
 
-addUser(user){
-  this.userA = this.userA.filter(obj => obj !== user);
-  this.usersToAdd.push(user.username);
+        for (let user of reunion.assistant) {
+          employees.push(user.username);
+        }
 
-}
+        for (let entry of data) {
+          if (entry.username != this.loggedUser.username && !employees.includes(entry.username)) {
+            this.allUsers.push(entry.username);
+          }
+        }
+      }
+    );
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
 
-addAssistantsBd(reunion){
-  this.reunionService.addAssistants(this.loggedUser,reunion.reunionId,this.usersToAdd).subscribe(data =>{
-    let reunionData: Reunion = data;
-    console.log(reunionData);
-    if(this.currentReunion == reunionData.reunionId){
-      reunion = reunionData ;
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
     }
+  }
 
-    this.currentReunion = null;
-    this.usersToAdd = new Array();
-    this.search = false;
+  exitReunion(reunion) {
 
-  });
-}
+    console.log(this.loggedUser);
+    this.reunionService.exitReunion(this.loggedUser, reunion.reunionId).pipe(takeUntil(this.onDestroy)).subscribe(
+      data => {
+        this.reunions = this.reunions.filter(obj => obj !== reunion);
+      }
+    );
+  }
+
+  deleteInvited(user) {
+    this.usersToAdd = this.usersToAdd.filter(obj => obj !== user);
+  }
 
 }

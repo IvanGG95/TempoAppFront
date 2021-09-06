@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   form: any = {};
   isLoggedIn = false;
   isLoginFailed = false;
-  errorMessage = 'Invalid login';
+  errorMessage = 'Usuario o contraseña incorrectos';
   roles: string[] = [];
   router: Router;
   user: User;
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         this.reloadPage();
       },
       err => {
-        this.errorMessage = err.error.message;
+        console.log(err);
         this.isLoginFailed = true;
       }
     );

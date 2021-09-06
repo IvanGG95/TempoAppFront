@@ -1,8 +1,6 @@
 <div class="container">
     <div>
-        <h2>Peticiones Enviadas</h2>
-        <hr>
-
+        <h2 class="titleWhite mb-5">Peticiones Enviadas</h2>
         <div class="row">
             <div class="card col-lg-auto m-2 borderBg" style="width: 18rem;" *ngFor="let petition of ownPetitions" [ngClass]="{
                 ' border-warning' : petition.status == 'Pendiente', 
@@ -25,8 +23,7 @@
         </div>
     </div>
     <div class="mt-5">
-        <h2>Peticiones Recividas</h2>
-        <hr>
+        <h2 class="titleWhite mb-5">Peticiones Recividas</h2>
 
         <div class=row>
             <div class="card col-lg-auto m-2 borderBg " style="width: 18rem;" *ngFor="let petition of recivedPetitions" [ngClass]="{

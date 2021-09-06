@@ -1,45 +1,64 @@
-<div class="container">
-    <h2>Crear Reunion</h2>
-    <hr>
+<h2 class="titleWhite mb-5">Crear Reunion</h2>
+<div class="container card-tmp">
     <form class="form" (ngSubmit)="onSubmit()">
         <div class="form-group">
+          <div class="m-4">
+          <label for="teamName">Fecha de la reunion:</label>
+          <input class="form-control form-control-lg" type="datetime-local" required
+          [(ngModel)]="form.date" #date="ngModel" date="date" name="Fecha reunion">
+          </div>
 
-            <input class="form-control form-control-lg" type="datetime-local" required
-            [(ngModel)]="form.date" #date="ngModel" date="date" name="Fecha reunion">
-
-            <div class="input-group my-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">Equipos</label>
-                </div>
-                <select class="custom-select" [(ngModel)]="form.team" #team="ngModel" class="form-control" name="team">
-                  <option *ngFor="let team of teams" value="{{team.teamId}}"> {{team.name}}</option>
-                </select>
+          <div class="row  m-4" style="padding-right: 0px; padding-left: 0px;">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Equipos</label>
               </div>
+              <select class="custom-select" [(ngModel)]="form.team" #team="ngModel" class="form-control" name="team">
+                <option *ngFor="let team of teams" value="{{team.teamId}}"> {{team.name}}</option>
+              </select>
+            </div>
+          </div>
 
+          <div class="m-4">
             <label for="teamDescripcion">Descripcion</label>
-            <textarea class="form-control" id="teamDescripcion" rows="3" required 
+            <textarea class="form-control"  placeholder="Descripcion" id="teamDescripcion" rows="3" required 
             [(ngModel)]="form.description" #description="ngModel" class="form-control" name="description"></textarea>
+          </div>
 
+          <div class="m-4">
             <ul class="list-group mt-4" *ngIf="usersToAdd.length != 0">
-              <li class="list-group-item active">Usuarios invitados</li>
-              <li class="list-group-item" *ngFor="let username of usersToAdd" >{{username}}</li>
+              <li class="list-group-item bg-tmp">Usuarios invitados</li>
+              <li class="list-group-item" *ngFor="let username of usersToAdd" >
+                <div class="row">
+                  <div class="col">                  <label >{{username}}</label>                   </div>
+                  <div class="col"><button type="button col" (click)="deleteInvited(username)" class="btn transparent">
+                    <img class="img-responsive" src="assets/icons/no.png"  width="15" height="15" alt="">
+                  </button></div>
+                </div></li>
             </ul>
+          </div>
         </div>
 
-        <input type="submit" class="btn btn-primary btn-lg" value="Crear">
-    </form>
-
-    <h2 class="mt-4">Invitar usuarios</h2>
-    <hr>
-    <form class="form-inline" (ngSubmit)="onSearchSubmit()">
-        <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuario" aria-label="Search" [(ngModel)]="form.nameUser" #nameUser="ngModel" name="nameUser" class="form-control">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <div class="text-center">
+          <input type="submit" class="btn btnTmp btn-lg largebtn" value="Crear">
+        </div>    
       </form>
-      <ul class="list-group mt-2">
+</div>
+
+<h2 class="mt-5 titleWhite">Invitar usuarios</h2>
+<div class="container card-tmp mt-5">
+    <form class="form-inline  m-4" (ngSubmit)="onSearchSubmit()">
+      <label for="teamDescripcion">Buscar Usuario</label>
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuario" aria-label="Search" [(ngModel)]="form.nameUser" #nameUser="ngModel" name="nameUser" class="form-control">
+        <div class="text-center mt-4">
+          <button class="btn  btnTmp btn-lg largebtn" type="submit">Buscar</button>
+        </div>
+      </form>
+      <ul class="list-group m-4">
         <li class="list-group-item" *ngFor="let user of userA" >
           <div class="row" *ngIf="user.username != loggedUser.username">
-            <div class="col text-center"><h4>{{user.username}}</h4></div>
-            <div class="col"><button class="btn btn-outline-success col" (click)="addUser(user)">Invitar</button></div>
+            <div class="col text-center"><label>{{user.username}}</label></div>
+            <div class="col"><button class="btn btnTmp col" (click)="addUser(user)">Invitar</button></div>
           </div>
         </li>
       </ul>

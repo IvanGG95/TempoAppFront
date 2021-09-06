@@ -1,41 +1,119 @@
 <div class="container">
-  <div class=" row">
-    <div class=" = col">  <h2>Mis Equipos</h2>    </div>
+  <div class=" row mb-5">
+    <div class=" = col">
+      <h2 class="titleWhite">Mis Equipos</h2>
+    </div>
     <div class=" = col-lg-2">
-      <button type="button" class="btn btn-primary btn-lg" routerLink="/principal/teamsAdd">
+      <button type="button" class="btn btnTmp btn-lg" routerLink="/principal/teamsAdd">
         Crear Equipo
       </button>
     </div>
   </div>
-  <hr>
 
   <div class=row>
-  <div class="card col-lg-auto m-2" style="width: 18rem;" *ngFor="let team of teams">
-    <div class="card-body container">
-      <div class="row">
-        <div class="col"><h5 class="card-title mb-4">{{team.name}}</h5>
-        </div>
-        <div class="col col-lg-3">
-          <div *ngIf="team.owner.username == loggedUser.username; else elseBlock">
-            <button type="button" (click)="deleteTeam(team)" class="btn btn-outline-danger">
-              <img class="img-responsive" src="assets/icons/no.png"  width="30" height="30" alt="">
-            </button>
+
+    <div class="card col-lg-auto m-2" style="width: 18rem;" *ngFor="let team of teams">
+      <div class="card-body position-relative">
+
+        <div class="row">
+          <div class="col">
+            <h5 class="card-title mb-4">{{team.name}}</h5>
           </div>
-          <ng-template  #elseBlock>
-            <button type="button" (click)="deleteTeam(team)" class="btn btn-outline-danger">
-              <img class="img-responsive" src="assets/icons/exit.svg"  width="30" height="30" alt="">
-            </button></ng-template>
+          <div class="col col-lg-2">
+            <div *ngIf="team.owner.username == loggedUser.username; else elseBlock">
+              <button type="button" (click)="deleteTeam(team)" width="12" height="12" class="btn transparent">
+                <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+              </button>
+            </div>
+            <ng-template #elseBlock>
+              <button type="button" (click)="exitTeam(team)" class="btn transparent">
+                <img class="img-responsive" src="assets/icons/exit.svg" width="15" height="15" alt="">
+              </button>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="row">
+          <h6 class="col-5  card-subtitle mb-2 text-muted">Creador: </h6>
+          <h6 class="col card-subtitle mb-2">{{team.owner.username}}</h6>
+        </div>
+
+        <div class="row mt-3">
+          <h6 class="col-5  card-subtitle mb-2 text-muted">Miembros: </h6>
+          <h6 class="col card-subtitle mb-2">{{team.employees.length}}</h6>
+        </div>
+
+        <div class="row mt-3">
+          <h6 class="col card-subtitle mb-2 text-muted">Descripcion: </h6>
+        </div>
+        <p class="mb-5 card-text">{{team.description}}</p>
+        <div class="row position-absolute fixed-bottom">
+          <button class="btn btnTmp col m-2" *ngIf="team.owner.username==loggedUser.username"
+            (click)="open(invitar, team)">Invitar</button>
+          <button class="btn btnTmp col m-2" (click)="open(miembros, team)">Miembros</button>
         </div>
       </div>
-
-      <h6 class="card-subtitle mb-2 text-muted">Creador: {{team.owner.username}}</h6>
-      <p class="card-text">{{team.description}}</p>
-      <hr>   
-        <h6 class="text-primary">Miembros</h6>
+    </div>
+    <ng-template #miembros let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Miembros</h4>
+        <button type="button" class="close transparent" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+        </button>
+      </div>
+      <div class="modal-body">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item" *ngFor="let user of team.employees">{{user.username}}</li>
+          <li class="list-group-item row text-center" *ngFor="let user of currentTeam.employees">
+            <div class="col"> <label>{{user.username}}</label>
+            </div>
+            <div class="col"> <button type="button" class="close transparent" aria-label="Close"
+                (click)="deleteFromTeam(user)">
+                <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+              </button></div>
+          </li>
         </ul>
+      </div>
+    </ng-template>
 
-  </div>
-  </div>
-</div>
+    <ng-template #invitar let-modal let-searchUser="$implicit">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Usuarios</h4>
+        <button type="button" class="close transparent" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="m-4">
+          <ul class="list-group mt-4" *ngIf="usersToAdd.length != 0">
+            <li class="list-group-item bg-tmp text-light">Usuarios invitados</li>
+            <li class="list-group-item" *ngFor="let username of usersToAdd">
+              <div class="row">
+                <div class="col"> <label>{{username}}</label> </div>
+                <div class="col"><button type="button col" (click)="deleteInvited(username)" class="btn transparent">
+                    <img class="img-responsive" src="assets/icons/no.png" width="15" height="15" alt="">
+                  </button></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="row m-4" *ngIf="usersToAdd.length != 0">
+          <button class="btn btnTmp col m-2" (click)="addAssistantsBd()">Enviar invitaciones</button>
+          <hr>
+        </div>
+        <div class="md-form row m-4 text-center rounded bg-dark text-light">
+          <label for="teamDescripcion">Buscar Usuario</label>
+          <input class="form-control" type="search" [(ngModel)]="searchText" placeholder="Buscar">
+        </div>
+
+        <ul class="list-group m-4">
+          <li class="list-group-item" *ngFor="let user of allUsers | filter: searchText">
+            <div class="row" *ngIf="user != loggedUser.username">
+              <div class="col text-center"><label>{{user}}</label></div>
+              <div class="col text-center"><button class="btn btnTmp col" (click)="addUser(user)">Invitar</button></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </ng-template>

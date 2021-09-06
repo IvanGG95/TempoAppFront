@@ -1,35 +1,54 @@
-<div class="container">
-    <h2>Crear Equipo</h2>
-    <hr>
+<h2 class="titleWhite mb-5">Crear Equipo</h2>
+<div class="container card-tmp">
     <form class="form" (ngSubmit)="onSubmit()">
         <div class="form-group">
+          <div class="m-4">
             <label for="teamName">Nombre del equipo</label>
             <input class="form-control form-control-lg" type="text" placeholder="Nombre" required
             [(ngModel)]="form.name" #name="ngModel" name="name">
+          </div>
+          <div class="m-4">
             <label for="teamDescripcion">Descripcion</label>
-            <textarea class="form-control" id="teamDescripcion" rows="3" required 
+            <textarea class="form-control"  placeholder="Descripcion" id="teamDescripcion" rows="3" required 
             [(ngModel)]="form.description" #description="ngModel" class="form-control" name="description"></textarea>
-
+          </div>
+          <div class="m-4">
             <ul class="list-group mt-4" *ngIf="usersToAdd.length != 0">
-              <li class="list-group-item active">Usuarios invitados</li>
-              <li class="list-group-item" *ngFor="let username of usersToAdd" >{{username}}</li>
+              <li class="list-group-item bg-tmp">Usuarios invitados</li>
+              <li class="list-group-item" *ngFor="let username of usersToAdd" >
+                <div class="row">
+                  <div class="col">                  <label >{{username}}</label>                   </div>
+                  <div class="col"><button type="button col" (click)="deleteInvited(username)" class="btn transparent">
+                    <img class="img-responsive" src="assets/icons/no.png"  width="15" height="15" alt="">
+                  </button></div>
+                </div></li>
             </ul>
+          </div>
         </div>
-
-        <input type="submit" class="btn btn-primary btn-lg" value="Crear">
+        <div class="m-4" *ngIf="isError">
+          <div class="row" *ngFor="let msn of formErros">
+              <label class="text-danger">{{msn}}</label>
+          </div>
+      </div>
+        <div class="text-center">
+          <input type="submit" class="btn btnTmp btn-lg largebtn" value="Crear">
+        </div>
     </form>
-
-    <h2 class="mt-4">Invitar usuarios</h2>
-    <hr>
-    <form class="form-inline" (ngSubmit)="onSearchSubmit()">
+</div>
+<h2 class="mt-5 titleWhite">Invitar usuarios</h2>
+<div class="container card-tmp mt-5">
+    <form class="form-inline m-4" (ngSubmit)="onSearchSubmit()">
+      <label for="teamDescripcion">Buscar Usuario</label>
         <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuario" aria-label="Search" [(ngModel)]="form.nameUser" #nameUser="ngModel" name="nameUser" class="form-control">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <div class="text-center mt-4">
+          <button class="btn  btnTmp btn-lg largebtn" type="submit">Buscar</button>
+        </div>
       </form>
-      <ul class="list-group mt-2">
+      <ul class="list-group m-4">
         <li class="list-group-item" *ngFor="let user of userA" >
           <div class="row" *ngIf="user.username != loggedUser.username">
-            <div class="col text-center"><h4>{{user.username}}</h4></div>
-            <div class="col"><button class="btn btn-outline-success col" (click)="addUser(user)">Invitar</button></div>
+            <div class="col text-center"><label>{{user.username}}</label></div>
+            <div class="col"><button class="btn btnTmp col" (click)="addUser(user)">Invitar</button></div>
           </div>
         </li>
       </ul>

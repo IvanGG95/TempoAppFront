@@ -15,6 +15,7 @@ export class TeamService {
   constructor(private http: HttpClient) { }
 
   getTeams(credentials): Observable<Team[]> {
+    console.log(credentials)
 
     const httpOptions = {
       headers: new HttpHeaders({ 
@@ -47,5 +48,27 @@ export class TeamService {
     };
 
     return this.http.delete<Team>(USER_API+"/"+id, httpOptions);
+  }
+
+  exitTeam(credentials, user, id): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+      }),
+    };
+
+    return this.http.post<Team>(USER_API + "/exitTeam/" + id + "/" + user.username, "",httpOptions);
+  }
+
+  addEmployees(credentials, id, user: string[]): Observable<Team>{
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+      }),
+    };
+
+    return this.http.post<Team>(USER_API + "/addEmployees/" + id, user, httpOptions);
   }
 }

@@ -76,4 +76,8 @@ export class AddReunionComponent implements OnInit, OnDestroy {
     this.onDestroy.next();
   }
 
+  deleteInvited(user){
+    this.usersToAdd = this.usersToAdd.filter(obj => obj !== user);
+  }
+
 }

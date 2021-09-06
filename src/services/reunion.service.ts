@@ -59,4 +59,15 @@ export class ReunionService {
 
     return this.http.post<Reunion>(USER_API + "/addAssistants/" + id, user, httpOptions);
   }
+
+  exitReunion(credentials, id): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+      }),
+    };
+
+    return this.http.post<Team>(USER_API + "/exitReunion/" + id + "/" + credentials.username, "",httpOptions);
+  }
 }

@@ -15,7 +15,8 @@ import { UserService } from 'src/services/user.service';
 })
 export class VacationsComponent implements OnInit {
 
-  constructor(private monthService: MonthService, private userService: UserService) { }
+  constructor(private monthService: MonthService, private userService: UserService) {
+   }
 
   loadMonths = new Map();
 
@@ -26,7 +27,7 @@ export class VacationsComponent implements OnInit {
   days: Day[];
 
   susbscriber: Subscription;
-
+  today: string;
   actualMonth: string;
   actualYear: number;
   actualMonthNumber: number;
@@ -45,6 +46,7 @@ export class VacationsComponent implements OnInit {
     var mm = String(date.getMonth() + 1).padStart(2, '0');
     var yyyy = date.getFullYear();
     var today = yyyy + '-' + mm + '-' + dd;
+    this.today= today;
     this.actualMonthNumber = date.getMonth() + 1
     this.calendarDate = yyyy + '-' + mm;
     this.firstCalendarDate = today;
@@ -64,30 +66,32 @@ export class VacationsComponent implements OnInit {
   }
 
   onSave(date: Day) {
-    if (date.free) {
-      date.free = false;
-      this.holidaysToAdd = this.holidaysToAdd.filter(obj => obj !== date);
-      this.user.availableFreeDays = this.user.availableFreeDays + 1;
-    } else {
-      if ((date.holidays == false) && (date.weekEnd == false)
-        && !(date.toDelete == true) && (date.taken == false)) {
-        date.free = true;
-        this.holidaysToAdd.push(date);
-        this.user.availableFreeDays = this.user.availableFreeDays - 1;
+    if(!this.isPassDay(date.date) && !this.isToday(date.date)){
+      if (date.free) {
+        date.free = false;
+        this.holidaysToAdd = this.holidaysToAdd.filter(obj => obj !== date);
+        this.user.availableFreeDays = this.user.availableFreeDays + 1;
+      } else {
+        if ((date.holidays == false) && (date.weekEnd == false)
+          && !(date.toDelete == true) && (date.taken == false) && this.user.availableFreeDays > 0) {
+          date.free = true;
+          this.holidaysToAdd.push(date);
+          this.user.availableFreeDays = this.user.availableFreeDays - 1;
+        }
       }
-    }
-
-    if (date.holidays) {
-      this.holidaysToDelete.push(date);
-      date.holidays = false;
-      date.toDelete = true;
-      this.user.availableFreeDays = this.user.availableFreeDays + 1;
-    } else {
-      if (date.toDelete) {
-        this.holidaysToDelete = this.holidaysToDelete.filter(obj => obj !== date);
-        date.toDelete = false;
-        date.holidays = true;
-        this.user.availableFreeDays = this.user.availableFreeDays - 1;
+  
+      if (date.holidays) {
+        this.holidaysToDelete.push(date);
+        date.holidays = false;
+        date.toDelete = true;
+        this.user.availableFreeDays = this.user.availableFreeDays + 1;
+      } else {
+        if (date.toDelete) {
+          this.holidaysToDelete = this.holidaysToDelete.filter(obj => obj !== date);
+          date.toDelete = false;
+          date.holidays = true;
+          this.user.availableFreeDays = this.user.availableFreeDays - 1;
+        }
       }
     }
   }
@@ -183,7 +187,7 @@ export class VacationsComponent implements OnInit {
         }
       );;
     }
-
+    await this.delay(500);
     if(freeDaysDelete.length > 0){
       this.monthService.deleteHollidays(this.loggedUser, freeDaysDelete).subscribe(
         data => {
@@ -195,13 +199,36 @@ export class VacationsComponent implements OnInit {
     this.holidaysToDelete = new Array;
     this.holidaysToAdd = new Array;
     this.susbscriber.unsubscribe;
-    await this.delay(1000);
+    await this.delay(500);
     this.ngOnInit();
 
   }
 
   delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
+isPassDay(dayDate: string){
+  let date: Date = new Date(); 
+  let dateDay: Date = new Date(dayDate); 
+  if(date.getTime() >= dateDay.getTime()){
+    if(this.isToday(dayDate)){
+      return false;
+    }
+    return true;
+  }
+
+  return false;
+}
+
+
+isToday(dayDate: string){
+
+  if(dayDate == this.today){
+    return true;
+  }
+
+  return false;
 }
 }
 

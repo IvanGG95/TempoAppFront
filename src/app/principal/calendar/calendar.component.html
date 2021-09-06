@@ -1,25 +1,33 @@
+<h2 class="titleWhite mb-5">Calendario</h2>
+
+<div class="card-tmp">
 <div class="container ">
   <div class="row justify-content-md-center mb-4">
-    <button type="button" class="col col-lg-2 btn btn-dark btn-lg text-center rounded-circle" (click)="backMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/derecha.svg"  width="60" height="60" alt=""></button>
+    <button type="button" class="col col-lg-2 btn btn-dark text-center transparent" (click)="backMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/left.png"  width="60" height="60" alt=""></button>
     <h4 class="text-center display-4 mb-4 col-lg-5 px-5">{{actualMonth}} {{actualYear}}</h4>
-    <button type="button" class="col col-lg-2 btn btn-dark text-center rounded-circle"  (click)="nextMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/izquierda.svg"  width="60" height="60" alt=""></button>
+    <button type="button" class="col col-lg-2 btn btn-dark text-center transparent"  (click)="nextMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/right.png"  width="60" height="60" alt=""></button>
   </div>
 </div>
 
 <div class="container position-static">
-    <header>
-      <div class="row bg-dark text-white">
-        <h5 class="col-sm-1 order-1">Lun</h5>
-        <h5 class="col-sm-1 order-2">Mar</h5>
-        <h5 class="col-sm-1 order-3">Mie</h5>
-        <h5 class="col-sm-1 order-4">Jue</h5>
-        <h5 class="col-sm-1 order-5">Vie</h5>
-        <h5 class="col-sm-1 order-6">Sab</h5>
-        <h5 class="col-sm-1 order-7">Dom</h5>
-        <h5 class="col-sm-5 order-8 text-center">Resumen Dia</h5>
-         <div class="w-100"></div>
+    <div class="row">
+      <div class="col-lg-7">
+        <div class="row bg-dark text-white rounded">
+          <h5 class="col">Lun</h5>
+          <h5 class="col">Mar</h5>
+          <h5 class="col">Mie</h5>
+          <h5 class="col">Jue</h5>
+          <h5 class="col">Vie</h5>
+          <h5 class="col">Sab</h5>
+          <h5 class="col">Dom</h5>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row border border-dark rounded">
+<h5 class="text-center">Resumen Dia</h5>
+          </div>
+        </div>
       </div>
-    </header>
     <div>
 
     <div class='row border border-right-0 border-bottom-0'>
@@ -29,15 +37,16 @@
           (click)="seeDay(a)"
           [ngClass]="{'w-100' : index%8 == 0, 
           'card col' : index%8!=0, 
-          'bg-info' : a.toDelete == true,
-          'bg-primary' : a.holidays==true, 
+          'bg-info' : a.holidays==true,
+          'bg-used' : isPassDay(a.date), 
           'bg-danger' : a.taken==true,
           'bg-dark text-white' : a.weekEnd==true,
-          'bg-secondary' : a.free==true}" 
+          'bg-secondary' : a.free==true,
+          'bg-success text-light' : isToday(a.date)}" 
           style="width: 12rem;">
               <div *ngIf="index%8!=0">
                 <div>
-                  <h5 class="card-title text-center" [ngClass]="{' border rounded-circle border-success' : a.actual==true}">{{a.dayActual}}</h5>
+                  <h5 class="card-title text-center mt-2" [ngClass]="{'bg-hover text-white rounded': a.reunions.length != 0}">{{a.dayActual}}</h5>
                 </div>
               </div>
             </div>
@@ -60,8 +69,23 @@
             </tr>
           </tbody>
         </table>
+        <table class="table table-dark" *ngIf="dayToSee.assignedFreeDays.length != 0">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Evento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let availableFreeDay of dayToSee.assignedFreeDays">
+              <th scope="row">{{availableFreeDay.username}}</th>
+              <td>Vacaciones</td>
+            </tr>
+          </tbody>
+        </table>
       </div>  
      </div>
+</div>
 </div>
 </div>
 

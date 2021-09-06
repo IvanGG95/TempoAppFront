@@ -18,6 +18,8 @@ export class AddTeamComponent implements OnInit {
   userA: User[];
   usersToAdd: string[];
   form: any = {};
+  formErros: string[];
+  isError: boolean;
 
   constructor(private teamservice: TeamService, private router: Router, private userService: UserService) {
     this.usersToAdd = new Array();
@@ -41,6 +43,10 @@ export class AddTeamComponent implements OnInit {
     this.teamservice.addTeam(this.loggedUser, teamAdd).subscribe( 
       data => {
         this.router.navigateByUrl("principal/teams");
+      },
+      err => {
+        this.isError = true;
+        this.formErros = err.error
       }
     );    
   }
@@ -48,13 +54,33 @@ export class AddTeamComponent implements OnInit {
   onSearchSubmit(): void{
     this.userService.getUsers(this.loggedUser, this.form.nameUser).subscribe(
       data => {
-      this.userA = data});
+      this.userA = data;
+      this.checkIsValidUserToAdd(data);
+    });
   }
 
   addUser(user){
     this.userA = this.userA.filter(obj => obj !== user);
     this.usersToAdd.push(user.username);
 
+  }
+
+  deleteInvited(user){
+    this.usersToAdd = this.usersToAdd.filter(obj => obj !== user);
+  }
+
+  checkIsValidUserToAdd(users:User[]){
+    for(let user of users){
+      if(user.username == this.loggedUser.username){
+        this.userA = this.userA.filter(obj => obj !== user);
+      }else{
+        for(let user2 of this.usersToAdd){
+          if(user2 == user.username){
+            this.userA = this.userA.filter(obj => obj !== user);
+          }
+        }        
+      }
+    }
   }
 
 }
