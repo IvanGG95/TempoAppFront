@@ -1,5 +1,5 @@
 export interface ReunionAdd {
-    date: string;
+    date: Date;
     creator: string;
     description: string;
     users: string[];

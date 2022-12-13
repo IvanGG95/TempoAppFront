@@ -35,7 +35,7 @@ export class PrincipalComponent implements OnInit {
   public logOut(){
     localStorage.clear();
     console.log('loguot');
-    window.location.reload();
+    this.router.navigateByUrl('/login');
   }
 
   public goToCalendar(){

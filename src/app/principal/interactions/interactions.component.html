@@ -7,8 +7,9 @@
                 ' border-danger' : petition.status == 'Rechazada',
                 ' border-success' : petition.status == 'Aceptada'}">
               <div class="card-body container">
-                <h5 class="card-title mb-4" *ngIf="petition.reunion != null;else teamPeti">Invitacion a Reunion</h5>
-                <ng-template class="card-title mb-4" #teamPeti><h5 class="card-title mb-4">Invitacion a Equipo {{petition.team.name}}</h5></ng-template>
+                <h5 class="card-title mb-4" *ngIf="petition.reunion != null">Invitacion a Reunion</h5>
+                <h5 class="card-title mb-4" *ngIf="petition.team != null">Invitacion a Equipo {{petition.team.name}}</h5>
+                <h5 class="card-title mb-4" *ngIf="petition.assignedFreeDay != null">Validacion vacaciones {{petition.assignedFreeDay.date}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Para: {{petition.receiver.username}}</h6>
                 <div class="row mt-4">
                     <div class="col"><span class="card-text status" disabled>{{petition.status}}</span></div>
@@ -31,8 +32,9 @@
                 ' border-danger' : petition.status == 'Rechazada',
                 ' border-success' : petition.status == 'Aceptada'}">
               <div class="card-body container">
-                <h5 class="card-title mb-4" *ngIf="petition.reunion != null;else teamPeti">Invitacion a Reunion</h5>
-                <ng-template class="card-title mb-4" #teamPeti><h5 class="card-title mb-4">Invitacion a Equipo {{petition.team.name}}</h5></ng-template>
+                <h5 class="card-title mb-4" *ngIf="petition.reunion != null">Invitacion a Reunion</h5>
+                <h5 class="card-title mb-4" *ngIf="petition.team != null">Invitacion a Equipo {{petition.team.name}}</h5>
+                <h5 class="card-title mb-4" *ngIf="petition.assignedFreeDay != null">Validacion vacaciones {{petition.assignedFreeDay.date}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">De: {{petition.creator.username}}</h6>
                 <p class="card-text status">{{petition.status}}</p>
 

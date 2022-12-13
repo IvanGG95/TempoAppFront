@@ -82,7 +82,7 @@ export class ReunionComponent implements OnInit, OnDestroy {
     this.reunion = reunion;
     this.allUsers = new Array();
 
-    this.userService.getAllUsers(this.loggedUser).pipe(takeUntil(this.onDestroy)).subscribe(
+    this.userService.getUsersByTeam(this.loggedUser,this.reunion.team.teamId).pipe(takeUntil(this.onDestroy)).subscribe(
       data => {
         let employees: string[] = new Array();
 

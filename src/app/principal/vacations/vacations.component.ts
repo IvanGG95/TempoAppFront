@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { from, Subscription } from 'rxjs';
 import { Day } from '../../../helpers/dayInterface.type'
@@ -13,10 +13,15 @@ import { UserService } from 'src/services/user.service';
   templateUrl: './vacations.component.html',
   styleUrls: ['./vacations.component.css']
 })
-export class VacationsComponent implements OnInit {
+export class VacationsComponent implements OnInit , OnDestroy{
 
   constructor(private monthService: MonthService, private userService: UserService) {
    }
+
+  ngOnDestroy(): void {
+    this.susbscriber.unsubscribe();
+    this.susbscribers.forEach(a => a.unsubscribe());
+  }
 
   loadMonths = new Map();
 
@@ -27,6 +32,7 @@ export class VacationsComponent implements OnInit {
   days: Day[];
 
   susbscriber: Subscription;
+  susbscribers: Subscription[] = new Array;
   today: string;
   actualMonth: string;
   actualYear: number;
@@ -181,19 +187,19 @@ export class VacationsComponent implements OnInit {
     });
 
     if(freeDaysAdd.length > 0){
-      this.monthService.addHollidays(this.loggedUser, freeDaysAdd).subscribe(
+     this.susbscribers.push(this.monthService.addHollidays(this.loggedUser, freeDaysAdd).subscribe(
         data => {
           console.log(data);
         }
-      );;
+      ));
     }
     await this.delay(500);
     if(freeDaysDelete.length > 0){
-      this.monthService.deleteHollidays(this.loggedUser, freeDaysDelete).subscribe(
+      this.susbscribers.push(this.monthService.deleteHollidays(this.loggedUser, freeDaysDelete).subscribe(
         data => {
           console.log(data)
         }
-      );;
+      ))
     }
 
     this.holidaysToDelete = new Array;
@@ -223,11 +229,9 @@ isPassDay(dayDate: string){
 
 
 isToday(dayDate: string){
-
   if(dayDate == this.today){
     return true;
   }
-
   return false;
 }
 }

@@ -135,13 +135,18 @@ export class TeamsComponent implements OnInit, OnDestroy {
   }
 
   deleteFromTeam(username) {
-    console.log(username);
-    this.teamService.exitTeam(this.loggedUser, username, this.currentTeam.teamId).pipe(takeUntil(this.onDestroy)).subscribe(
-      data => {
-        this.modalService.dismissAll();
-        this.ngOnInit();
-      }
-    );
+    if(this.currentTeam.owner.username==this.loggedUser.username){
+      this.teamService.exitTeam(this.loggedUser, username, this.currentTeam.teamId).pipe(takeUntil(this.onDestroy)).subscribe(
+        data => {
+          this.modalService.dismissAll();
+          this.ngOnInit();
+        }
+      );
+    }
+  }
+
+  isOwner(): Boolean {
+    return this.currentTeam.owner.username==this.loggedUser.username
   }
 
 }

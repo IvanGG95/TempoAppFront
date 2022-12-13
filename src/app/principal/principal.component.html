@@ -13,14 +13,10 @@
         </div>
       </div>
       <div class="sidebar-header">
-        <div class="user-pic">
-          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture">
-        </div>
         <div class="user-info">
           <span class="user-name">
-            <strong>{{user.username}}</strong>
+            Bienvenido <strong> {{user.username}}</strong>
           </span>
-          <span class="user-role">Admin</span>
             <a (click)="logOut()" class="btn btn-info btn-md my-2" value="Login">Logout</a>
         </div>
       </div>
@@ -42,11 +38,6 @@
               <i class="fa"></i>
               <span>Vacaciones</span>
             </a>
-          </li>
-          <li class="sidebar-content">
-            <a routerLink="/principal/workers">
-              <i class="fa"></i>
-              <span>Empleados</span></a>
           </li>
           <li class="sidebar-content">
             <a routerLink="/principal/teams">
@@ -72,24 +63,6 @@
     <div class="container">
 
       <router-outlet></router-outlet> 
-      
-
-      <footer class="text-right">
-        <div class="mb-2">
-          <small>
-            <a class="text-light">
-            2021 Iván González González
-            </a>
-          </small>
-        </div>
-
-        <div>
-          <a href="https://github.com/IvanGG95" target="_blank">
-          </a>
-          <a href="https://twitter.com/IvanGGV95" target="_blank">
-          </a>
-        </div>
-      </footer>
 
     </div>
 

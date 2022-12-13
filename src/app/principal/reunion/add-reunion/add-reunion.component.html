@@ -4,8 +4,8 @@
         <div class="form-group">
           <div class="m-4">
           <label for="teamName">Fecha de la reunion:</label>
-          <input class="form-control form-control-lg" type="datetime-local" required
-          [(ngModel)]="form.date" #date="ngModel" date="date" name="Fecha reunion">
+          <input class="form-control form-control-lg" type="datetime-local" min="{{minDate}}" max="2023-06-20T08:30" required 
+          [(ngModel)]="form.date" #date="ngModel" date="date" name="Fecha reunion"/>
           </div>
 
           <div class="row  m-4" style="padding-right: 0px; padding-left: 0px;">
@@ -13,7 +13,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="inputGroupSelect01">Equipos</label>
               </div>
-              <select class="custom-select" [(ngModel)]="form.team" #team="ngModel" class="form-control" name="team">
+              <select class="custom-select" [(ngModel)]="form.team" #team="ngModel" class="form-control" name="team" (change)="onTeamSelected($event.target.value)">
                 <option *ngFor="let team of teams" value="{{team.teamId}}"> {{team.name}}</option>
               </select>
             </div>
@@ -28,17 +28,21 @@
           <div class="m-4">
             <ul class="list-group mt-4" *ngIf="usersToAdd.length != 0">
               <li class="list-group-item bg-tmp">Usuarios invitados</li>
-              <li class="list-group-item" *ngFor="let username of usersToAdd" >
+              <li class="list-group-item" *ngFor="let user of usersToAdd" >
                 <div class="row">
-                  <div class="col">                  <label >{{username}}</label>                   </div>
-                  <div class="col"><button type="button col" (click)="deleteInvited(username)" class="btn transparent">
+                  <div class="col">                  <label >{{user.username}}</label>                   </div>
+                  <div class="col"><button type="button col" (click)="deleteInvited(user)" class="btn transparent">
                     <img class="img-responsive" src="assets/icons/no.png"  width="15" height="15" alt="">
                   </button></div>
                 </div></li>
             </ul>
           </div>
         </div>
-
+        <div *ngIf="error" class="m-4">
+          <div class="alert-danger" *ngFor="let item of error">
+            {{item}}
+          </div>
+        </div>
         <div class="text-center">
           <input type="submit" class="btn btnTmp btn-lg largebtn" value="Crear">
         </div>    
@@ -46,20 +50,19 @@
 </div>
 
 <h2 class="mt-5 titleWhite">Invitar usuarios</h2>
-<div class="container card-tmp mt-5">
-    <form class="form-inline  m-4" (ngSubmit)="onSearchSubmit()">
-      <label for="teamDescripcion">Buscar Usuario</label>
-        <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuario" aria-label="Search" [(ngModel)]="form.nameUser" #nameUser="ngModel" name="nameUser" class="form-control">
-        <div class="text-center mt-4">
-          <button class="btn  btnTmp btn-lg largebtn" type="submit">Buscar</button>
+<div class="container card-tmp mt-5" *ngIf="teamSelected; else elseTemplate">
+    <ul class="list-group m-4">
+      <li class="list-group-item" *ngFor="let user of users" >
+        <div class="row" *ngIf="user.username != loggedUser.username">
+          <div class="col text-center"><label>{{user.username}}</label></div>
+          <div class="col"><button class="btn btnTmp col" (click)="addUser(user)">Invitar</button></div>
         </div>
-      </form>
-      <ul class="list-group m-4">
-        <li class="list-group-item" *ngFor="let user of userA" >
-          <div class="row" *ngIf="user.username != loggedUser.username">
-            <div class="col text-center"><label>{{user.username}}</label></div>
-            <div class="col"><button class="btn btnTmp col" (click)="addUser(user)">Invitar</button></div>
-          </div>
-        </li>
-      </ul>
+      </li>
+    </ul>
 </div>
+<ng-template #elseTemplate>
+  <div class="container card-tmp mt-5">
+    <div class="alert-danger">Seleciona un Equipo para poder invitar a gente a la reunion</div>
+  </div>
+</ng-template>
+

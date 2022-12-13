@@ -1,6 +1,7 @@
 import { User } from "./userInterface.type"
 import { Team } from "./teamInterface.type"
 import { Reunion } from "./reunionInterface.type"
+import { AssignedFreeDay } from "./assignedFreeDay.type";
 
 export interface Petition {
 
@@ -15,6 +16,8 @@ export interface Petition {
     reunion: Reunion
 
     team: Team;
+
+    assignedFreeDay: AssignedFreeDay;
   
     status: string;
 }

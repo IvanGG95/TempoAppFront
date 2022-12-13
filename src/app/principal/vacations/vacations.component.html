@@ -32,6 +32,7 @@
       'card col' : index%8!=0, 
       'bg-hover' : a.toDelete == true,
       'bg-used' : isPassDay(a.date),
+      'bg-warning' : a.pending==true,
       'bg-info' : a.holidays==true, 
       'bg-danger' : a.taken==true,
       'bg-dark text-white' : a.weekEnd==true,

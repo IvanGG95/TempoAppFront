@@ -3,9 +3,9 @@
 <div class="card-tmp">
 <div class="container ">
   <div class="row justify-content-md-center mb-4">
-    <button type="button" class="col col-lg-2 btn btn-dark text-center transparent" (click)="backMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/left.png"  width="60" height="60" alt=""></button>
+    <button type="button" class="col col-lg-2 btn btn-dark text-center transparent cosa" (click)="backMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/left.png"  width="60" height="60" alt=""></button>
     <h4 class="text-center display-4 mb-4 col-lg-5 px-5">{{actualMonth}} {{actualYear}}</h4>
-    <button type="button" class="col col-lg-2 btn btn-dark text-center transparent"  (click)="nextMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/right.png"  width="60" height="60" alt=""></button>
+    <button type="button" class="col col-lg-2 btn btn-dark text-center transparent cosa"  (click)="nextMonth(actualMonthNumber,actualYear)"><img class="img-responsive" src="assets/icons/right.png"  width="60" height="60" alt=""></button>
   </div>
 </div>
 
@@ -37,6 +37,7 @@
           (click)="seeDay(a)"
           [ngClass]="{'w-100' : index%8 == 0, 
           'card col' : index%8!=0, 
+          'bg-warning' : a.pending==true,
           'bg-info' : a.holidays==true,
           'bg-used' : isPassDay(a.date), 
           'bg-danger' : a.taken==true,

@@ -8,6 +8,7 @@ export interface Day {
     taken: boolean;
     holidays: boolean;
     weekEnd: boolean;
+    pending: boolean;
     toDelete: boolean;
     date: string;
     dayActual: number;

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../helpers/userInterface.type';
+import { Team } from 'src/helpers/teamInterface.type';
 
 
 const USER_API = 'http://localhost:8080/user';
@@ -70,5 +71,16 @@ export class UserService {
     };
 
     return this.http.get<User[]>(USER_API + "/getAll" , httpOptions);
+  }
+
+  getUsersByTeam(credentials, teamId): Observable<User[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+      }),
+    };
+
+    return this.http.get<User[]>(USER_API + "/getUsersByTeam/" + teamId , httpOptions);
   }
 }

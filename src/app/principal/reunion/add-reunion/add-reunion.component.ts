@@ -20,15 +20,19 @@ export class AddReunionComponent implements OnInit, OnDestroy {
 
   nameUser: string;
   loggedUser: User;
-  userA: User[];
-  usersToAdd: string[];
+  users: User[];
+  usersToAdd: User[];
   form: any = {};
   private readonly onDestroy = new Subject<void>();
   teams: Team[];
+  teamSelected;
   selectControl = new FormControl();
+  error: string;
+  minDate = new Date().toISOString().substring(0,16);
 
   constructor(private reunionService: ReunionService, private teamService: TeamService, private router: Router, private userService: UserService) {
     this.usersToAdd = new Array();
+    console.log(this.minDate)
   }
 
 
@@ -42,12 +46,13 @@ export class AddReunionComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    
+    var usersString:string[] = new Array;
+    this.usersToAdd.forEach(u => {usersString.push(u.username)})
     const teamAdd : ReunionAdd = {
-      date: this.form.date,
+      date: new Date(this.form.date),
       creator: this.loggedUser.username,
       description: this.form.description,
-      users: this.usersToAdd,
+      users: usersString,
       teamId: this.form.team
     }
     console.log(this.form);
@@ -56,20 +61,16 @@ export class AddReunionComponent implements OnInit, OnDestroy {
     this.reunionService.addReunion(this.loggedUser, teamAdd).subscribe( 
       data => {
         this.router.navigateByUrl("principal/reunion");
+      },
+      error =>{
+        this.error = error.error;
       }
     );  
   }
 
-  onSearchSubmit(): void{
-    this.userService.getUsers(this.loggedUser, this.form.nameUser).subscribe(
-      data => {
-      this.userA = data});
-  }
-
   addUser(user){
-    this.userA = this.userA.filter(obj => obj !== user);
-    this.usersToAdd.push(user.username);
-
+    this.users = this.users.filter(obj => obj !== user);
+    this.usersToAdd.push(user);
   }
 
   ngOnDestroy(){
@@ -78,6 +79,16 @@ export class AddReunionComponent implements OnInit, OnDestroy {
 
   deleteInvited(user){
     this.usersToAdd = this.usersToAdd.filter(obj => obj !== user);
+    this.users.push(user);
+  }
+
+  onTeamSelected(team){
+    console.log(team)
+    this.teamSelected = team;
+    this.userService.getUsersByTeam(this.loggedUser, team).subscribe(data => {
+      this.users = data;
+      this.usersToAdd = [];
+    });
   }
 
 }

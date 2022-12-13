@@ -29,13 +29,8 @@ export class InteractionsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem('user'));
     console.log(this.ownPetitions);
-    this.subscriptionOwner = timer(0, 10000).pipe(
-      switchMap(() => this.petitionService.getOwnPetitions(this.loggedUser))
-    ).subscribe(result => this.ownPetitions = result);
-
-    this.subscriptionReciver = timer(0, 10000).pipe(
-      switchMap(() => this.petitionService.getReceiverPetitions(this.loggedUser))
-    ).subscribe(result => this.recivedPetitions = result);      
+    this.subscriptionOwner = this.petitionService.getOwnPetitions(this.loggedUser).subscribe(result => this.ownPetitions = result);
+    this.subscriptionReciver = this.petitionService.getReceiverPetitions(this.loggedUser).subscribe(result => this.recivedPetitions = result);      
   }
 
   ngOnDestroy() {
@@ -56,16 +51,21 @@ export class InteractionsComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.petitionService.putUpdate(this.loggedUser, petitionUdate).subscribe();
+    this.petitionService.putUpdate(this.loggedUser, petitionUdate).subscribe(result => {    
+      this.subscriptionOwner.unsubscribe();
+      this.subscriptionReciver.unsubscribe();
+      this.subscriptionOwner = this.petitionService.getOwnPetitions(this.loggedUser).subscribe(result => this.ownPetitions = result);
+      this.subscriptionReciver = this.petitionService.getReceiverPetitions(this.loggedUser).subscribe(result => this.recivedPetitions = result); 
+    }); 
   }
 
   deletePetition(petition :Petition){
     this.petitionService.deletePetitions(this.loggedUser, petition.petitionId).subscribe(
       data =>{
-        let deleted = data;
-        if(deleted == true){
-          this.ownPetitions = this.ownPetitions.filter(obj => obj !== petition);
-        }
+        this.subscriptionOwner.unsubscribe();
+        this.subscriptionReciver.unsubscribe();
+        this.subscriptionOwner = this.petitionService.getOwnPetitions(this.loggedUser).subscribe(result => this.ownPetitions = result);
+        this.subscriptionReciver = this.petitionService.getReceiverPetitions(this.loggedUser).subscribe(result => this.recivedPetitions = result); 
       });
   }
 }
